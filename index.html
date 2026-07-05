@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photography Website Intro</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #050505;
+      color: white;
+      overflow: hidden;
+    }
+
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: hideIntro 5.8s forwards;
+    }
+
+    .intro-text {
+      position: absolute;
+      top: 12%;
+      font-size: clamp(16px, 3vw, 28px);
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: textIn 1.2s forwards;
+    }
+
+    .aperture {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #111 35%, #333 70%, #111);
+      box-shadow: 0 0 80px rgba(255,255,255,0.12);
+      overflow: hidden;
+      animation: apertureZoom 4s forwards;
+    }
+
+    .blade {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(135deg, #1c1c1c, #555, #111);
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+      clip-path: polygon(0 0, 100% 20%, 80% 100%, 0 80%);
+      animation: bladeOpen 2.2s ease-in-out forwards;
+    }
+
+    .blade:nth-child(1) { transform: rotate(0deg) translate(-20px, -110px); }
+    .blade:nth-child(2) { transform: rotate(60deg) translate(-20px, -110px); }
+    .blade:nth-child(3) { transform: rotate(120deg) translate(-20px, -110px); }
+    .blade:nth-child(4) { transform: rotate(180deg) translate(-20px, -110px); }
+    .blade:nth-child(5) { transform: rotate(240deg) translate(-20px, -110px); }
+    .blade:nth-child(6) { transform: rotate(300deg) translate(-20px, -110px); }
+
+    .viewfinder {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)),
+        url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      filter: blur(12px);
+      transform: scale(1.08);
+      opacity: 0;
+      z-index: 30;
+      animation: showViewfinder 5.5s forwards;
+    }
+
+    .camera-ui {
+      position: fixed;
+      inset: 0;
+      z-index: 35;
+      opacity: 0;
+      animation: showUI 5.5s forwards;
+      pointer-events: none;
+    }
+
+    .focus-box {
+      position: absolute;
+      width: 150px;
+      height: 95px;
+      border: 2px solid white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: focusLock 5.5s forwards;
+    }
+
+    .camera-data {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    .rec {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .rec::before {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background: red;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 45;
+      opacity: 0;
+      animation: flash 5.5s forwards;
+    }
+
+    .site {
+      min-height: 100vh;
+      background-image:
+        linear-gradient(90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.15)),
+        url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      padding: 28px;
+      opacity: 0;
+      animation: revealSite 5.8s forwards;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .hero {
+      max-width: 620px;
+      margin-top: 18vh;
+      animation: heroUp 6.3s forwards;
+      transform: translateY(30px);
+      opacity: 0;
+    }
+
+    .hero small {
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: #f1d6a8;
+    }
+
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(46px, 9vw, 95px);
+      line-height: 0.95;
+      margin: 18px 0;
+    }
+
+    .hero p {
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 520px;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 24px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 999px;
+      color: white;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+    }
+
+    @keyframes textIn {
+      to { opacity: 1; transform: translateY(-8px); }
+    }
+
+    @keyframes bladeOpen {
+      0% { scale: 1.4; opacity: 1; }
+      100% { scale: 0.25; opacity: 0.15; }
+    }
+
+    @keyframes apertureZoom {
+      0%, 45% { transform: scale(1); opacity: 1; }
+      70% { transform: scale(2.8); opacity: 0.7; }
+      100% { transform: scale(4); opacity: 0; }
+    }
+
+    @keyframes showViewfinder {
+      0%, 42% { opacity: 0; filter: blur(12px); }
+      50% { opacity: 1; filter: blur(12px); }
+      72% { opacity: 1; filter: blur(12px); transform: scale(1.08); }
+      82% { opacity: 1; filter: blur(0); transform: scale(1); }
+      100% { opacity: 0; filter: blur(0); }
+    }
+
+    @keyframes showUI {
+      0%, 48% { opacity: 0; }
+      55%, 88% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes focusLock {
+      0%, 68% { border-color: white; box-shadow: none; }
+      76%, 88% { border-color: #4cff8f; box-shadow: 0 0 20px rgba(76,255,143,0.45); }
+      100% { opacity: 0; }
+    }
+
+    @keyframes flash {
+      0%, 84% { opacity: 0; }
+      88% { opacity: 1; }
+      94% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes hideIntro {
+      0%, 92% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes revealSite {
+      0%, 88% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes heroUp {
+      0%, 88% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .aperture {
+        width: 210px;
+        height: 210px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        margin-top: 22vh;
+      }
+
+      .camera-data {
+        gap: 12px;
+        font-size: 11px;
+        bottom: 24px;
+      }
+
+      .focus-box {
+        width: 120px;
+        height: 78px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="intro">
+    <div class="intro-text">Every great story begins with focus.</div>
+
+    <div class="aperture">
+      <div class="blade"></div>
+      <div class="blade"></div>
+      <div class="blade"></div>
+      <div class="blade"></div>
+      <div class="blade"></div>
+      <div class="blade"></div>
+    </div>
+  </div>
+
+  <div class="viewfinder"></div>
+
+  <div class="camera-ui">
+    <div class="rec">REC</div>
+    <div class="focus-box"></div>
+
+    <div class="camera-data">
+      <span>ISO 100</span>
+      <span>F1.8</span>
+      <span>1/500</span>
+      <span>4K</span>
+    </div>
+  </div>
+
+  <div class="flash"></div>
+
+  <main class="site">
+    <nav>
+      <div class="logo">Frame Studio</div>
+
+      <div class="nav-links">
+        <span>Portfolio</span>
+        <span>Films</span>
+        <span>Pricing</span>
+        <span>Contact</span>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <small>Wedding Photography</small>
+      <h1>Stories captured with soul.</h1>
+      <p>
+        Premium wedding photography and cinematic films crafted for couples
+        who want their memories to feel timeless, emotional, and beautifully preserved.
+      </p>
+      <a href="#" class="btn">View Portfolio</a>
+    </section>
+  </main>
+
+</body>
+</html>
