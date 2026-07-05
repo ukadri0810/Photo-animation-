@@ -1,56 +1,470 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Frame Studio Focus Experience</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#020202;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:white}
-button,a{font:inherit}
-.stage{position:fixed;inset:0;background:#050505;overflow:hidden;touch-action:manipulation}
-.bg{position:absolute;inset:-6%;background-image:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.15)),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85');background-size:cover;background-position:center;filter:blur(12px);transform:scale(1.06);opacity:0;transition:filter .55s ease,transform .55s ease,opacity .8s ease}
-.stage.ready .bg{opacity:1}
-.bg.focused{filter:blur(1.5px);transform:scale(1.01)}
-.bokeh{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 35%,rgba(255,223,160,.35),transparent 4%),radial-gradient(circle at 82% 28%,rgba(255,255,255,.25),transparent 3.5%),radial-gradient(circle at 70% 72%,rgba(255,198,116,.22),transparent 5%),radial-gradient(circle at 42% 18%,rgba(255,255,255,.18),transparent 3%);filter:blur(8px);animation:floatBokeh 8s ease-in-out infinite alternate;opacity:.7}.overlay{position:absolute;inset:0;background:radial-gradient(circle at center,transparent 0 42%,rgba(0,0,0,.38) 68%,rgba(0,0,0,.88) 100%);pointer-events:none}.lens{position:absolute;left:50%;top:50%;width:min(70vw,340px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.9);background:radial-gradient(circle at 38% 32%,rgba(120,150,180,.4),rgba(5,8,12,.6) 38%,#020202 72%);box-shadow:0 0 0 12px rgba(255,255,255,.04),0 0 80px rgba(120,170,255,.18),inset 0 0 60px rgba(255,255,255,.1);animation:lensOut 2.6s ease forwards}.reflection{position:absolute;inset:14%;border-radius:50%;background:linear-gradient(130deg,transparent 15%,rgba(255,255,255,.32),transparent 48%);transform:rotate(-20deg);animation:reflect 2.5s ease forwards}.blade{position:absolute;left:50%;top:50%;width:52%;height:52%;background:linear-gradient(130deg,#111,#555,#181818);transform-origin:0 0;clip-path:polygon(0 0,100% 12%,82% 100%,0 84%);opacity:.9;animation:openBlade 2.2s cubic-bezier(.7,0,.2,1) forwards}.blade:nth-child(1){transform:rotate(0deg) translate(-12%,-86%)}.blade:nth-child(2){transform:rotate(60deg) translate(-12%,-86%)}.blade:nth-child(3){transform:rotate(120deg) translate(-12%,-86%)}.blade:nth-child(4){transform:rotate(180deg) translate(-12%,-86%)}.blade:nth-child(5){transform:rotate(240deg) translate(-12%,-86%)}.blade:nth-child(6){transform:rotate(300deg) translate(-12%,-86%)}
-.hud{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;pointer-events:none}.stage.ready .hud{opacity:1}.top-left{position:absolute;top:22px;left:22px}.top-right{position:absolute;top:22px;right:22px;letter-spacing:2px}.rec-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3737;margin-right:8px;box-shadow:0 0 12px #ff3737}.status{position:absolute;top:72px;left:22px;font-size:13px;letter-spacing:2px;color:#d7ecff}.bottom-data{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:18px;align-items:center;text-align:center;font-size:12px;color:rgba(255,255,255,.82);white-space:nowrap}.bottom-data strong{display:block;font-size:13px;color:white;font-weight:500}.hint{position:absolute;left:50%;bottom:88px;transform:translateX(-50%);padding:10px 15px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.35);backdrop-filter:blur(14px);border-radius:999px;font-size:13px;white-space:nowrap;opacity:0;transition:.5s ease}.stage.ready .hint{opacity:1}.focus-box{position:absolute;left:50%;top:50%;width:120px;height:80px;transform:translate(-50%,-50%);opacity:0;transition:left .45s cubic-bezier(.2,.8,.2,1),top .45s cubic-bezier(.2,.8,.2,1),opacity .2s}.focus-box.show{opacity:1}.corner{position:absolute;width:24px;height:24px;border-color:white}.tl{left:0;top:0;border-left:3px solid;border-top:3px solid}.tr{right:0;top:0;border-right:3px solid;border-top:3px solid}.bl{left:0;bottom:0;border-left:3px solid;border-bottom:3px solid}.br{right:0;bottom:0;border-right:3px solid;border-bottom:3px solid}.focus-box.lock .corner{border-color:#62ff95;filter:drop-shadow(0 0 8px rgba(98,255,149,.8))}.target{position:absolute;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.45);box-shadow:0 0 18px rgba(255,255,255,.55);animation:pulse 1.6s ease infinite}.target:nth-child(1){left:48%;top:43%}.target:nth-child(2){left:58%;top:62%}.target:nth-child(3){left:38%;top:68%}.target:nth-child(4){left:72%;top:32%}.targets{position:absolute;inset:0;opacity:0;transition:.4s}.stage.ready .targets{opacity:1}.flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none}.flash.on{animation:flash .42s ease}.site{position:absolute;inset:0;padding:24px;opacity:0;pointer-events:none;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}.site.show{opacity:1;pointer-events:auto;transform:translateY(0)}nav{display:flex;justify-content:space-between;align-items:center}.logo{font-family:Georgia,serif;font-size:24px}.links{display:flex;gap:22px;font-size:14px;color:rgba(255,255,255,.82)}.hero{max-width:620px;margin-top:18vh}.hero small{color:#f3d6a1;letter-spacing:4px;text-transform:uppercase}.hero h1{font-family:Georgia,serif;font-size:clamp(46px,10vw,96px);line-height:.95;margin:18px 0}.hero p{font-size:17px;line-height:1.7;color:rgba(255,255,255,.78);max-width:510px}.btn{display:inline-block;margin-top:26px;padding:13px 22px;border:1px solid rgba(255,255,255,.65);border-radius:999px;color:white;text-decoration:none;background:rgba(255,255,255,.06);backdrop-filter:blur(12px)}.enter{position:absolute;right:22px;bottom:88px;z-index:5;padding:12px 18px;border:0;border-radius:999px;background:white;color:#111;cursor:pointer;opacity:0;transform:translateY(8px);transition:.4s ease}.enter.show{opacity:1;transform:translateY(0)}.dust{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,.45);animation:dust 7s linear infinite}.shake{animation:shake .28s ease}.breath{animation:breath .55s ease}
-@keyframes openBlade{to{transform:rotate(var(--r,0deg)) translate(-12%,-86%) scale(.18);opacity:.18}}@keyframes lensOut{0%,55%{opacity:1;transform:translate(-50%,-50%) scale(.9)}100%{opacity:0;transform:translate(-50%,-50%) scale(3.4);visibility:hidden}}@keyframes reflect{to{transform:rotate(18deg) translate(20px,-28px);opacity:0}}@keyframes floatBokeh{to{transform:translate3d(12px,-16px,0) scale(1.03)}}@keyframes pulse{50%{transform:scale(1.5);opacity:.45}}@keyframes flash{0%,100%{opacity:0}38%{opacity:.95}}@keyframes shake{25%{transform:translate(1px,-1px)}50%{transform:translate(-1px,1px)}75%{transform:translate(1px,1px)}}@keyframes breath{0%{transform:scale(1.01)}45%{transform:scale(1.025)}100%{transform:scale(1.01)}}@keyframes dust{from{transform:translateY(10vh);opacity:0}20%,80%{opacity:.55}to{transform:translateY(-80vh);opacity:0}}
-@media(max-width:620px){.top-left{top:16px;left:16px;font-size:13px}.top-right{top:16px;right:16px;font-size:12px}.status{top:52px;left:16px;font-size:12px}.bottom-data{bottom:22px;gap:12px;font-size:10px}.bottom-data strong{font-size:11px}.hint{bottom:76px;font-size:12px}.enter{right:14px;bottom:76px}.links{display:none}.hero{margin-top:24vh}.site{padding:20px}.target{width:12px;height:12px}.focus-box{width:104px;height:70px}.lens{width:78vw}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Premium Photographer Focus Intro</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      --gold: #f5d39a;
+      --cream: #fff7eb;
+      --dark: #030303;
+      --glass: rgba(255, 255, 255, 0.12);
+      --green: #72ffab;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; min-height: 100%; background: #030303; overflow-x: hidden; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: white; }
+
+    .experience {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      isolation: isolate;
+      cursor: none;
+      background: #030303;
+    }
+
+    .photo-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #050505;
+      transform: translateZ(0);
+    }
+
+    .photo-layer {
+      position: absolute;
+      inset: -4%;
+      background-image:
+        linear-gradient(90deg, rgba(0,0,0,.60), rgba(0,0,0,.05) 48%, rgba(0,0,0,.50)),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=90');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.06);
+      will-change: opacity, transform;
+    }
+
+    .photo-blur { filter: blur(18px) saturate(.96) brightness(.72); opacity: 1; }
+    .photo-sharp { filter: saturate(1.05) contrast(1.04) brightness(.9); opacity: 0; }
+    .photo-portrait { clip-path: circle(0 at 50% 50%); filter: saturate(1.08) contrast(1.05) brightness(.98); opacity: 1; transition: clip-path .9s cubic-bezier(.16,1,.3,1); }
+    .photo-portrait.active { clip-path: circle(210px at var(--x,50%) var(--y,50%)); }
+
+    .bokeh {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .55;
+      mix-blend-mode: screen;
+      background:
+        radial-gradient(circle at 72% 21%, rgba(255,217,148,.45) 0 9px, transparent 18px),
+        radial-gradient(circle at 80% 38%, rgba(255,255,255,.24) 0 7px, transparent 16px),
+        radial-gradient(circle at 66% 57%, rgba(255,205,128,.28) 0 10px, transparent 23px),
+        radial-gradient(circle at 91% 66%, rgba(154,190,255,.25) 0 8px, transparent 20px),
+        radial-gradient(circle at 56% 30%, rgba(255,255,255,.18) 0 5px, transparent 14px);
+      animation: bokehFloat 8s ease-in-out infinite alternate;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,.52) 73%, rgba(0,0,0,.95));
+      z-index: 4;
+    }
+
+    .lens-shell {
+      position: absolute;
+      width: min(62vw, 470px);
+      aspect-ratio: 1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(.9);
+      border-radius: 50%;
+      z-index: 8;
+      pointer-events: none;
+      opacity: .92;
+      animation: lensEntrance 1.25s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    .lens-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 31%, rgba(16,16,16,.96) 32% 39%, #050505 40% 48%, #242424 50%, #070707 58%, #1a1a1a 65%, #000 74%),
+        conic-gradient(from 40deg, #1a1a1a, #555, #050505, #2e2e2e, #090909, #5b5b5b, #171717);
+      box-shadow:
+        inset 0 0 18px rgba(255,255,255,.08),
+        inset 0 0 58px rgba(0,0,0,.85),
+        0 30px 90px rgba(0,0,0,.55),
+        0 0 90px rgba(156,190,255,.10);
+    }
+
+    .lens-glass {
+      position: absolute;
+      inset: 24%;
+      border-radius: 50%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 54% 57%, rgba(21,35,50,.92), rgba(1,7,13,.98) 58%, #000 72%),
+        radial-gradient(circle at 28% 22%, rgba(115,176,255,.7), transparent 28%),
+        radial-gradient(circle at 70% 76%, rgba(190,82,255,.35), transparent 26%);
+      box-shadow:
+        inset 0 0 36px rgba(158,198,255,.22),
+        inset 0 0 95px rgba(0,0,0,.98),
+        0 0 22px rgba(123,171,255,.2);
+    }
+
+    .lens-glass::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        linear-gradient(115deg, transparent 0 28%, rgba(255,255,255,.34) 36%, rgba(255,255,255,.03) 44%, transparent 55%),
+        radial-gradient(circle at var(--rx,30%) var(--ry,28%), rgba(118,172,255,.55), transparent 22%);
+      transform: translate3d(var(--mx, 0), var(--my, 0), 0) rotate(-12deg);
+      transition: transform .18s ease-out;
+      mix-blend-mode: screen;
+    }
+
+    .lens-markings {
+      position: absolute;
+      inset: 7%;
+      border-radius: 50%;
+      color: rgba(255,255,255,.72);
+      font-size: clamp(9px, 1.4vw, 13px);
+      letter-spacing: .22em;
+      text-align: center;
+      text-transform: uppercase;
+      animation: slowRotate 18s linear infinite;
+    }
+    .lens-markings span:first-child { position: absolute; top: 5%; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+    .lens-markings span:last-child { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%) rotate(180deg); white-space: nowrap; }
+
+    .premium-copy {
+      position: absolute;
+      z-index: 12;
+      left: max(24px, 6vw);
+      top: 12vh;
+      max-width: 540px;
+      pointer-events: none;
+    }
+    .eyebrow { color: var(--gold); letter-spacing: .28em; text-transform: uppercase; font-size: 12px; margin-bottom: 14px; opacity: .9; }
+    .premium-copy h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(36px, 7.8vw, 88px); line-height: .94; font-weight: 400; text-shadow: 0 20px 70px rgba(0,0,0,.7); }
+    .premium-copy p { margin-top: 18px; color: rgba(255,255,255,.78); font-size: clamp(15px, 2.4vw, 18px); line-height: 1.65; max-width: 460px; }
+    .tap-pill { display: inline-flex; align-items: center; gap: 10px; margin-top: 24px; padding: 11px 16px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; background: rgba(0,0,0,.28); backdrop-filter: blur(18px); box-shadow: 0 20px 60px rgba(0,0,0,.22); }
+    .tap-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 20px rgba(114,255,171,.8); animation: pulse 1.2s ease-in-out infinite; }
+
+    .hud {
+      position: absolute;
+      inset: 22px;
+      z-index: 15;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: rgba(255,255,255,.88);
+      text-shadow: 0 8px 24px rgba(0,0,0,.9);
+    }
+    .hud-top { display: flex; justify-content: space-between; align-items: flex-start; font-size: clamp(11px, 2.4vw, 14px); letter-spacing: .08em; }
+    .rec::before { content: ""; width: 8px; height: 8px; background: #ff3636; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 18px #ff3636; }
+    .hud-bottom { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; gap: clamp(12px, 4vw, 34px); font-size: clamp(10px, 2.3vw, 13px); color: rgba(255,255,255,.76); text-align: center; white-space: nowrap; }
+    .focus-status { margin-top: 10px; font-size: clamp(12px, 2.5vw, 14px); color: var(--green); opacity: 0; transition: opacity .25s ease; }
+    .focus-status.active { opacity: 1; }
+
+    .focus-box {
+      position: absolute;
+      width: 108px;
+      height: 76px;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 16;
+      pointer-events: none;
+      opacity: 0;
+      transition: width .25s ease, height .25s ease, opacity .2s ease;
+    }
+    .focus-box.visible { opacity: 1; }
+    .focus-box.locked { width: 96px; height: 66px; }
+    .corner { position: absolute; width: 22px; height: 22px; border-color: white; transition: border-color .18s ease, filter .18s ease; }
+    .focus-box.locked .corner { border-color: var(--green); filter: drop-shadow(0 0 8px rgba(114,255,171,.75)); }
+    .c1 { left:0; top:0; border-left:2px solid; border-top:2px solid; }
+    .c2 { right:0; top:0; border-right:2px solid; border-top:2px solid; }
+    .c3 { left:0; bottom:0; border-left:2px solid; border-bottom:2px solid; }
+    .c4 { right:0; bottom:0; border-right:2px solid; border-bottom:2px solid; }
+
+    .cursor-dot {
+      position: fixed;
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 50%;
+      z-index: 100;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+
+    .flash {
+      position: absolute;
+      inset: 0;
+      z-index: 22;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(255,255,255,.95), rgba(255,255,255,.26) 18%, transparent 54%);
+    }
+
+    .dust { position: absolute; inset: 0; z-index: 7; pointer-events: none; overflow: hidden; opacity: .48; }
+    .dust span { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: rgba(255,255,255,.55); animation: drift linear infinite; }
+
+    .portfolio {
+      position: relative;
+      z-index: 30;
+      min-height: 100vh;
+      padding: 90px max(24px, 6vw);
+      background: #090806;
+      transform: translateY(40px);
+      opacity: 0;
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    body.portfolio-open .portfolio { opacity: 1; transform: translateY(0); }
+    body.portfolio-open .experience { height: 92vh; }
+    .portfolio-head { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 38px; }
+    .portfolio h2 { font-family: Georgia, serif; font-size: clamp(34px, 6vw, 70px); font-weight: 400; max-width: 700px; }
+    .portfolio p { color: rgba(255,255,255,.65); max-width: 430px; line-height: 1.7; }
+    .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { min-height: 410px; border-radius: 28px; overflow: hidden; position: relative; background-size: cover; background-position: center; box-shadow: 0 30px 90px rgba(0,0,0,.38); transform: translateZ(0); }
+    .card::after { content:""; position:absolute; inset:0; background: linear-gradient(transparent, rgba(0,0,0,.72)); }
+    .card span { position:absolute; left:22px; bottom:22px; z-index:2; font-family: Georgia, serif; font-size: 28px; }
+    .card:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=900&q=85'); }
+    .card:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=85'); }
+    .card:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=85'); }
+
+    .cta {
+      position: absolute;
+      right: max(22px, 5vw);
+      bottom: max(28px, 8vh);
+      z-index: 20;
+      max-width: 330px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.38);
+      border-radius: 22px;
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: .5s ease;
+      pointer-events: none;
+    }
+    .cta.show { opacity: 1; transform: translateY(0); }
+    .cta strong { display:block; color: var(--gold); margin-bottom:6px; }
+    .cta p { color: rgba(255,255,255,.72); font-size: 14px; line-height:1.5; }
+
+    .experience.focusing .photo-stage { animation: microShake .34s ease; }
+    .experience.focusing .photo-blur { animation: focusHunt .78s cubic-bezier(.16,1,.3,1); }
+    .experience.focusing .photo-sharp { animation: sharpPulse .78s cubic-bezier(.16,1,.3,1) forwards; }
+    .experience.focusing .photo-layer { animation: lensBreath .78s cubic-bezier(.16,1,.3,1); }
+    .experience.flash-on .flash { animation: flashPop .55s ease-out; }
+
+    @keyframes lensEntrance { from { transform: translate(-50%,-50%) scale(.76); opacity:0; filter: blur(8px); } to { transform: translate(-50%,-50%) scale(1); opacity:.92; filter: blur(0); } }
+    @keyframes bokehFloat { to { transform: translate3d(-14px, 18px, 0) scale(1.04); opacity:.72; } }
+    @keyframes slowRotate { to { transform: rotate(360deg); } }
+    @keyframes pulse { 50% { transform: scale(1.45); opacity:.55; } }
+    @keyframes drift { from { transform: translate3d(0,0,0); } to { transform: translate3d(30px,-120vh,0); } }
+    @keyframes focusHunt { 0%{opacity:1; filter:blur(18px) brightness(.72)} 38%{opacity:.55; filter:blur(7px) brightness(.8)} 62%{opacity:.78; filter:blur(13px) brightness(.74)} 100%{opacity:.20; filter:blur(4px) brightness(.9)} }
+    @keyframes sharpPulse { 0%{opacity:0} 42%{opacity:.35} 65%{opacity:.18} 100%{opacity:1} }
+    @keyframes lensBreath { 0%{transform:scale(1.06)} 42%{transform:scale(1.082)} 70%{transform:scale(1.052)} 100%{transform:scale(1.06)} }
+    @keyframes microShake { 0%,100%{transform:translate3d(0,0,0)} 25%{transform:translate3d(1px,-1px,0)} 55%{transform:translate3d(-1px,1px,0)} }
+    @keyframes flashPop { 0%{opacity:0} 15%{opacity:.75} 100%{opacity:0} }
+
+    @media (max-width: 760px) {
+      .experience { min-height: 720px; cursor: default; }
+      .cursor-dot { display: none; }
+      .lens-shell { width: 82vw; top: 55%; opacity: .78; }
+      .premium-copy { top: 8vh; left: 18px; right: 18px; }
+      .premium-copy h1 { max-width: 360px; }
+      .premium-copy p { max-width: 335px; }
+      .hud { inset: 16px; }
+      .hud-bottom { width: calc(100vw - 28px); justify-content: space-between; gap: 0; bottom: 12px; }
+      .cta { left: 18px; right: 18px; bottom: 86px; max-width: none; }
+      .gallery { grid-template-columns: 1fr; }
+      .portfolio-head { display:block; }
+      .portfolio p { margin-top: 14px; }
+      .card { min-height: 320px; }
+    }
+  </style>
 </head>
 <body>
-<div class="stage" id="stage">
-  <div class="bg" id="bg"></div>
-  <div class="bokeh"></div>
-  <div class="overlay"></div>
-  <div class="lens">
-    <div class="reflection"></div>
-    <div class="blade" style="--r:0deg"></div><div class="blade" style="--r:60deg"></div><div class="blade" style="--r:120deg"></div><div class="blade" style="--r:180deg"></div><div class="blade" style="--r:240deg"></div><div class="blade" style="--r:300deg"></div>
-  </div>
-  <div class="targets" id="targets"><div class="target"></div><div class="target"></div><div class="target"></div><div class="target"></div></div>
-  <div class="hud" id="hud">
-    <div class="top-left">SONY α7 IV</div>
-    <div class="top-right"><span class="rec-dot"></span>4K REC</div>
-    <div class="status" id="status">AF-C</div>
-    <div class="bottom-data"><span><strong>ISO</strong>100</span><span><strong>F1.8</strong></span><span><strong>1/250</strong></span><span><strong>128GB</strong></span><span><strong>1423</strong>Photos</span><span><strong id="battery">98%</strong></span></div>
-  </div>
-  <div class="hint" id="hint">Tap anywhere to focus</div>
-  <div class="focus-box" id="focusBox"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
-  <div class="flash" id="flash"></div>
-  <button class="enter" id="enter">Enter Portfolio</button>
-  <main class="site" id="site">
-    <nav><div class="logo">Frame Studio</div><div class="links"><span>Portfolio</span><span>Stories</span><span>Contact</span></div></nav>
-    <section class="hero"><small>Wedding Photography</small><h1>Stories captured with soul.</h1><p>A cinematic photography experience for couples who want memories to feel emotional, timeless and beautifully preserved.</p><a class="btn" href="#">View Portfolio</a></section>
-  </main>
-</div>
-<script>
-const stage=document.getElementById('stage');const bg=document.getElementById('bg');const box=document.getElementById('focusBox');const statusEl=document.getElementById('status');const enter=document.getElementById('enter');const site=document.getElementById('site');const flash=document.getElementById('flash');const hint=document.getElementById('hint');let focusCount=0;
-function beep(freq=880,duration=.08){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.frequency.value=freq;gain.gain.value=.025;osc.connect(gain);gain.connect(ctx.destination);osc.start();setTimeout(()=>{osc.stop();ctx.close()},duration*1000)}catch(e){}}
-setTimeout(()=>{stage.classList.add('ready')},1800);
-function focusAt(x,y){focusCount++;box.style.left=x+'px';box.style.top=y+'px';box.classList.add('show');box.classList.remove('lock');statusEl.textContent='FOCUSING';bg.classList.remove('focused');bg.classList.add('breath');stage.classList.add('shake');beep(220,.12);setTimeout(()=>{bg.classList.add('focused');box.classList.add('lock');statusEl.textContent='FOCUS LOCK';beep(980,.07)},360);setTimeout(()=>{bg.classList.remove('breath');stage.classList.remove('shake')},650);if(focusCount>=2){enter.classList.add('show');hint.textContent='Nice. Now enter the portfolio.'}}
-stage.addEventListener('pointerdown',e=>{if(e.target===enter||site.classList.contains('show'))return;focusAt(e.clientX,e.clientY)});
-enter.addEventListener('click',e=>{e.stopPropagation();flash.classList.add('on');beep(120,.06);setTimeout(()=>{site.classList.add('show');enter.classList.remove('show');hint.style.opacity='0';document.getElementById('hud').style.opacity='0';document.getElementById('targets').style.opacity='0';bg.classList.add('focused')},220)});
-for(let i=0;i<45;i++){const d=document.createElement('span');d.className='dust';d.style.left=Math.random()*100+'%';d.style.top=80+Math.random()*40+'%';d.style.animationDelay=Math.random()*7+'s';d.style.opacity=Math.random()*.5;stage.appendChild(d)}
-</script>
+  <section class="experience" id="experience">
+    <div class="photo-stage" id="stage">
+      <div class="photo-layer photo-blur"></div>
+      <div class="photo-layer photo-sharp"></div>
+      <div class="photo-layer photo-portrait" id="portrait"></div>
+      <div class="bokeh"></div>
+      <div class="dust" id="dust"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <div class="lens-shell" id="lens">
+      <div class="lens-ring"></div>
+      <div class="lens-glass"></div>
+      <div class="lens-markings"><span>FRAME PRIME 85MM F1.4</span><span>CODExA OPTICS</span></div>
+    </div>
+
+    <div class="premium-copy">
+      <div class="eyebrow">Interactive photography website</div>
+      <h1>Tap the frame. Control the focus.</h1>
+      <p>This hero behaves like a real camera — focus on the bride, bouquet, lights, or rings.</p>
+      <div class="tap-pill"><span class="tap-dot"></span><span>Tap anywhere to focus</span></div>
+    </div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div><strong>SONY α7 IV</strong><br><span id="mode">AF-C</span><div class="focus-status" id="focusStatus">FOCUS LOCK</div></div>
+        <div class="rec">4K REC</div>
+      </div>
+      <div class="hud-bottom">
+        <span>ISO<br>100</span><span>F1.4<br>85mm</span><span>1/250</span><span>RAW<br>128GB</span><span id="shots">1423<br>Photos</span><span id="battery">98%</span>
+      </div>
+    </div>
+
+    <div class="focus-box" id="focusBox"><span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span></div>
+    <div class="flash" id="flash"></div>
+    <div class="cta" id="cta"><strong>Would you add this to your website?</strong><p>Tag a photographer who needs a portfolio experience like this.</p></div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <h2>Stories captured with soul.</h2>
+      <p>Premium wedding photography and cinematic films crafted for couples who want their memories to feel timeless, emotional, and beautifully preserved.</p>
+    </div>
+    <div class="gallery"><div class="card"><span>Wedding</span></div><div class="card"><span>Editorial</span></div><div class="card"><span>Moments</span></div></div>
+  </section>
+
+  <div class="cursor-dot" id="cursor"></div>
+
+  <script>
+    const experience = document.getElementById('experience');
+    const focusBox = document.getElementById('focusBox');
+    const portrait = document.getElementById('portrait');
+    const lens = document.getElementById('lens');
+    const cursor = document.getElementById('cursor');
+    const mode = document.getElementById('mode');
+    const focusStatus = document.getElementById('focusStatus');
+    const cta = document.getElementById('cta');
+    const shots = document.getElementById('shots');
+    const battery = document.getElementById('battery');
+    const dust = document.getElementById('dust');
+
+    let focusCount = 0;
+    let canFocus = true;
+
+    const targets = [
+      { name: 'Bride', x: 41, y: 45 },
+      { name: 'Bouquet', x: 52, y: 66 },
+      { name: 'Rings', x: 58, y: 75 },
+      { name: 'Lights', x: 76, y: 32 },
+      { name: 'Couple', x: 48, y: 50 }
+    ];
+
+    function nearestTarget(x, y) {
+      return targets.reduce((best, target) => {
+        const d = Math.hypot(target.x - x, target.y - y);
+        return d < best.d ? { ...target, d } : best;
+      }, { ...targets[0], d: Infinity });
+    }
+
+    function beep(freq = 880, time = 0.07, gain = 0.025) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const amp = ctx.createGain();
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        amp.gain.value = gain;
+        osc.connect(amp);
+        amp.connect(ctx.destination);
+        osc.start();
+        amp.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time);
+        osc.stop(ctx.currentTime + time);
+      } catch(e) {}
+    }
+
+    function focusAt(clientX, clientY) {
+      if (!canFocus) return;
+      canFocus = false;
+      const rect = experience.getBoundingClientRect();
+      const px = ((clientX - rect.left) / rect.width) * 100;
+      const py = ((clientY - rect.top) / rect.height) * 100;
+      const target = nearestTarget(px, py);
+      const finalX = (target.x / 100) * rect.width;
+      const finalY = (target.y / 100) * rect.height;
+
+      focusBox.classList.add('visible');
+      focusBox.classList.remove('locked');
+      focusBox.style.left = finalX + 'px';
+      focusBox.style.top = finalY + 'px';
+      portrait.style.setProperty('--x', target.x + '%');
+      portrait.style.setProperty('--y', target.y + '%');
+      portrait.classList.remove('active');
+      void portrait.offsetWidth;
+      portrait.classList.add('active');
+
+      mode.textContent = 'AF searching...';
+      focusStatus.classList.remove('active');
+      experience.classList.remove('flash-on');
+      experience.classList.add('focusing');
+      beep(260, .12, .012);
+
+      setTimeout(() => {
+        focusBox.classList.add('locked');
+        mode.textContent = target.name.toUpperCase() + ' LOCKED';
+        focusStatus.classList.add('active');
+        experience.classList.add('flash-on');
+        beep(980, .08, .026);
+        focusCount++;
+        shots.innerHTML = (1423 - focusCount) + '<br>Photos';
+        if (focusCount >= 2) {
+          cta.classList.add('show');
+          if (focusCount === 2) document.body.classList.add('portfolio-open');
+        }
+      }, 560);
+
+      setTimeout(() => {
+        experience.classList.remove('focusing', 'flash-on');
+        canFocus = true;
+      }, 1050);
+    }
+
+    experience.addEventListener('pointerdown', e => focusAt(e.clientX, e.clientY));
+
+    window.addEventListener('pointermove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      const x = (e.clientX / window.innerWidth - .5) * 22;
+      const y = (e.clientY / window.innerHeight - .5) * 22;
+      lens.style.setProperty('--mx', x + 'px');
+      lens.style.setProperty('--my', y + 'px');
+      lens.style.setProperty('--rx', 30 + x/3 + '%');
+      lens.style.setProperty('--ry', 28 + y/3 + '%');
+    });
+
+    for (let i = 0; i < 42; i++) {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = (80 + Math.random() * 40) + '%';
+      s.style.animationDuration = (7 + Math.random() * 10) + 's';
+      s.style.animationDelay = (-Math.random() * 10) + 's';
+      s.style.opacity = .2 + Math.random() * .6;
+      dust.appendChild(s);
+    }
+
+    setInterval(() => {
+      const value = 98 - Math.min(focusCount, 5);
+      battery.textContent = value + '%';
+    }, 1400);
+  </script>
 </body>
 </html>
