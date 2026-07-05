@@ -46,27 +46,40 @@ async function runExperience(){
   cameraShell.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:260,easing:'ease-out'});
   flash.classList.add('fire');
   tone(60, .08, 'square', .08);
-  await wait(380);
-  intro.classList.add('zoom');
-  await wait(900);
+  await wait(260);
+
+  // Put the real homepage behind the intro before the transition starts.
+  // This avoids a black gap and makes the zoom feel continuous.
   site.classList.add('visible');
-  await wait(700);
+  intro.classList.add('zooming');
+  await wait(120);
+  intro.classList.add('zoom');
+  await wait(1150);
   intro.classList.add('hidden');
   document.body.style.overflow = 'auto';
 }
 startBtn.addEventListener('click', runExperience, {once:true});
 
+let pointerX = 0, pointerY = 0, rafPending = false;
 window.addEventListener('mousemove', (e)=>{
-  const x = e.clientX / window.innerWidth - .5;
-  const y = e.clientY / window.innerHeight - .5;
-  if(cursor){ cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; }
-  if(cameraShell){ cameraShell.style.transform = `rotateY(${x*8}deg) rotateX(${-y*8}deg)`; }
-  if(lensGlass){
-    lensGlass.querySelectorAll('.reflection').forEach((r,i)=>{
-      r.style.transform = `translate(${x*(i?24:42)}px, ${y*(i?20:34)}px) rotate(-25deg)`;
-    });
-  }
-});
+  pointerX = e.clientX; pointerY = e.clientY;
+  if(rafPending) return;
+  rafPending = true;
+  requestAnimationFrame(()=>{
+    rafPending = false;
+    const x = pointerX / window.innerWidth - .5;
+    const y = pointerY / window.innerHeight - .5;
+    if(cursor){ cursor.style.left = pointerX+'px'; cursor.style.top = pointerY+'px'; }
+    if(cameraShell && !intro.classList.contains('zoom')){
+      cameraShell.style.transform = `rotateY(${x*6}deg) rotateX(${-y*6}deg) translateZ(0)`;
+    }
+    if(lensGlass){
+      lensGlass.querySelectorAll('.reflection').forEach((r,i)=>{
+        r.style.transform = `translate3d(${x*(i?18:32)}px, ${y*(i?16:26)}px, 0) rotate(-25deg)`;
+      });
+    }
+  });
+},{passive:true});
 
 const cards = document.querySelectorAll('.frame-card');
 const obs = new IntersectionObserver(entries=>{

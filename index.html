@@ -3,125 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frame Studio | DSLR Intro Phase 2</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <title>Frame Studio | Cinematic Photography Experience</title>
+  <link rel="preconnect" href="https://images.unsplash.com" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="noise"></div>
+  <div class="grain"></div>
+  <div class="custom-cursor" aria-hidden="true"><span></span></div>
 
-  <button class="start-screen" type="button" aria-label="Start camera intro">
-    <span class="start-dot"></span>
-    <strong>Tap to start camera intro</strong>
-    <small>Best for Instagram screen recording</small>
-  </button>
+  <section class="intro" id="intro" aria-label="Camera intro animation">
+    <div class="intro-bg"></div>
+    <div class="zoom-plate" aria-hidden="true"></div>
+    <div class="bokeh b1"></div>
+    <div class="bokeh b2"></div>
+    <div class="bokeh b3"></div>
+    <div class="bokeh b4"></div>
 
-  <section class="intro" aria-label="Camera lens website intro">
-    <div class="intro-copy">
-      <span class="eyebrow">Frame Studio</span>
-      <h1>Every story begins with focus.</h1>
-      <p>Premium website intro for photographers</p>
-    </div>
-
-    <div class="lens-wrap">
-      <div class="lens-glow"></div>
-      <div class="lens-body">
-        <div class="markings markings-top">35mm · f/1.8 · CINEMA PRIME</div>
-        <div class="markings markings-bottom">FRAME STUDIO LENS</div>
-        <div class="ring ring-outer"></div>
-        <div class="ring ring-mid"></div>
-        <div class="ring ring-inner"></div>
-        <div class="glass">
-          <span class="glass-shine shine-one"></span>
-          <span class="glass-shine shine-two"></span>
-          <span class="glass-shine shine-three"></span>
-          <span class="blue-reflect"></span>
+    <div class="camera-shell" id="cameraShell">
+      <div class="top-label">FRAME STUDIO / 85MM F1.4</div>
+      <div class="lens" id="lens">
+        <div class="lens-ring ring-outer"></div>
+        <div class="lens-ring ring-mid"></div>
+        <div class="lens-glass" id="lensGlass">
+          <div class="reflection reflection-one"></div>
+          <div class="reflection reflection-two"></div>
+          <div class="sensor-grid"></div>
           <div class="aperture">
-            <span class="blade b1"></span><span class="blade b2"></span><span class="blade b3"></span><span class="blade b4"></span>
-            <span class="blade b5"></span><span class="blade b6"></span><span class="blade b7"></span><span class="blade b8"></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
           </div>
-          <div class="aperture-hole"></div>
+          <div class="hero-inside-lens"></div>
         </div>
       </div>
-    </div>
-
-    <div class="viewfinder">
-      <div class="vf-bg"></div>
-      <div class="vf-vignette"></div>
-      <div class="vf-scanline"></div>
-      <div class="vf-grid"></div>
-      <div class="focus-target"><span></span><span></span><span></span><span></span></div>
-      <div class="focus-pulse"></div>
-
-      <div class="vf-top">
-        <div><span class="rec-dot"></span><span>REC</span></div>
-        <span class="timer">00:00:03</span>
-        <span>BAT 87%</span>
-      </div>
-
-      <div class="vf-left">
-        <span>WB AUTO</span>
-        <span>AF-C</span>
-        <span>FACE DETECT</span>
-      </div>
-
-      <div class="vf-right">
+      <div class="camera-meta">
+        <span>ISO <b id="isoValue">100</b></span>
+        <span>F <b>1.4</b></span>
+        <span>1/<b id="shutterValue">500</b></span>
         <span>RAW</span>
-        <span>4K</span>
-        <span>24 FPS</span>
       </div>
-
-      <div class="vf-bottom">
-        <span>ISO 100</span>
-        <span>F1.8</span>
-        <span>1/500</span>
-        <span>+0.3 EV</span>
-      </div>
-      <div class="focus-status">Searching focus...</div>
     </div>
 
-    <div class="flash"></div>
+    <div class="viewfinder-hud" id="viewfinderHud">
+      <div class="hud-corner tl"></div>
+      <div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div>
+      <div class="hud-corner br"></div>
+      <div class="focus-square" id="focusSquare">
+        <i></i><i></i><i></i><i></i>
+      </div>
+      <div class="record-dot">REC</div>
+      <div class="hud-bottom">
+        <span>AF-C</span>
+        <span>85MM</span>
+        <span>4K 60</span>
+        <span id="battery">87%</span>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">Tap to focus</button>
+    <div class="status-text" id="statusText">Every story begins with focus.</div>
+    <div class="flash" id="flash"></div>
   </section>
 
-  <main class="site">
-    <nav class="navbar">
-      <a class="brand" href="#"><span>Frame</span>Studio</a>
-      <div class="nav-links">
-        <a href="#portfolio">Portfolio</a>
+  <main class="site" id="site">
+    <header class="navbar">
+      <div class="brand">Frame Studio</div>
+      <nav>
+        <a href="#work">Work</a>
         <a href="#stories">Stories</a>
-        <a href="#packages">Packages</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <a class="nav-cta" href="#contact">Book a Shoot</a>
-    </nav>
+        <a href="#booking">Booking</a>
+      </nav>
+    </header>
 
     <section class="hero">
-      <div class="hero-content">
-        <span class="hero-kicker">Premium wedding photography</span>
-        <h2>Memories framed like cinema.</h2>
-        <p>Editorial wedding photography, cinematic films, and emotion-led storytelling crafted for couples who want every frame to feel timeless.</p>
-        <div class="hero-actions">
-          <a href="#portfolio" class="primary-btn">View Portfolio</a>
-          <a href="#contact" class="ghost-btn">Check Availability</a>
-        </div>
+      <div class="hero-media" id="heroMedia"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">Premium wedding photography</p>
+        <h1><span>Stories</span><span>captured</span><span>with soul.</span></h1>
+        <p class="hero-desc">A cinematic portfolio experience designed for photographers who want their website to feel as premium as their work.</p>
+        <a class="cta" href="#work">Explore the gallery</a>
       </div>
+      <div class="scroll-note">Scroll to develop the film</div>
+    </section>
 
-      <div class="hero-card">
-        <div class="card-image"></div>
-        <div class="card-content">
-          <span>Upcoming Shoot</span>
-          <strong>Royal Wedding · 24 July</strong>
-          <small>Lead captured · quotation sent · advance pending</small>
-        </div>
+    <section class="film-strip" id="work">
+      <p class="section-kicker">Selected Frames</p>
+      <h2>Gallery that feels like a contact sheet.</h2>
+      <div class="strip-track">
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" alt="Wedding moment"><span>Wedding Vows</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80" alt="Couple portrait"><span>Portrait Session</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80" alt="Bride detail"><span>Bridal Details</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?auto=format&fit=crop&w=900&q=80" alt="Wedding ceremony"><span>Golden Ceremony</span></article>
+      </div>
+    </section>
+
+    <section class="story" id="stories">
+      <div>
+        <p class="section-kicker">The Website Payoff</p>
+        <h2>From intro animation to business enquiry.</h2>
+      </div>
+      <div class="story-card">
+        <p>This demo is built to make a photographer say: “Can you add this same camera intro to my website?”</p>
+        <button>Book a creative website</button>
       </div>
     </section>
   </main>
 
-  <button class="replay" type="button" aria-label="Replay intro">Replay intro</button>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
