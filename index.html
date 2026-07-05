@@ -3,24 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frame Studio | Premium Photography Intro</title>
+  <title>Frame Studio | DSLR Intro Phase 2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="noise"></div>
 
+  <button class="start-screen" type="button" aria-label="Start camera intro">
+    <span class="start-dot"></span>
+    <strong>Tap to start camera intro</strong>
+    <small>Best for Instagram screen recording</small>
+  </button>
+
   <section class="intro" aria-label="Camera lens website intro">
     <div class="intro-copy">
       <span class="eyebrow">Frame Studio</span>
       <h1>Every story begins with focus.</h1>
+      <p>Premium website intro for photographers</p>
     </div>
 
     <div class="lens-wrap">
       <div class="lens-glow"></div>
       <div class="lens-body">
+        <div class="markings markings-top">35mm · f/1.8 · CINEMA PRIME</div>
+        <div class="markings markings-bottom">FRAME STUDIO LENS</div>
         <div class="ring ring-outer"></div>
         <div class="ring ring-mid"></div>
         <div class="ring ring-inner"></div>
@@ -28,15 +37,10 @@
           <span class="glass-shine shine-one"></span>
           <span class="glass-shine shine-two"></span>
           <span class="glass-shine shine-three"></span>
+          <span class="blue-reflect"></span>
           <div class="aperture">
-            <span class="blade b1"></span>
-            <span class="blade b2"></span>
-            <span class="blade b3"></span>
-            <span class="blade b4"></span>
-            <span class="blade b5"></span>
-            <span class="blade b6"></span>
-            <span class="blade b7"></span>
-            <span class="blade b8"></span>
+            <span class="blade b1"></span><span class="blade b2"></span><span class="blade b3"></span><span class="blade b4"></span>
+            <span class="blade b5"></span><span class="blade b6"></span><span class="blade b7"></span><span class="blade b8"></span>
           </div>
           <div class="aperture-hole"></div>
         </div>
@@ -46,21 +50,34 @@
     <div class="viewfinder">
       <div class="vf-bg"></div>
       <div class="vf-vignette"></div>
+      <div class="vf-scanline"></div>
       <div class="vf-grid"></div>
-      <div class="focus-target">
-        <span></span><span></span><span></span><span></span>
-      </div>
+      <div class="focus-target"><span></span><span></span><span></span><span></span></div>
+      <div class="focus-pulse"></div>
+
       <div class="vf-top">
-        <span class="rec-dot"></span>
-        <span>REC</span>
-        <span>00:00:03</span>
+        <div><span class="rec-dot"></span><span>REC</span></div>
+        <span class="timer">00:00:03</span>
+        <span>BAT 87%</span>
       </div>
+
+      <div class="vf-left">
+        <span>WB AUTO</span>
+        <span>AF-C</span>
+        <span>FACE DETECT</span>
+      </div>
+
+      <div class="vf-right">
+        <span>RAW</span>
+        <span>4K</span>
+        <span>24 FPS</span>
+      </div>
+
       <div class="vf-bottom">
         <span>ISO 100</span>
         <span>F1.8</span>
         <span>1/500</span>
-        <span>4K</span>
-        <span>RAW</span>
+        <span>+0.3 EV</span>
       </div>
       <div class="focus-status">Searching focus...</div>
     </div>
@@ -70,9 +87,7 @@
 
   <main class="site">
     <nav class="navbar">
-      <a class="brand" href="#">
-        <span>Frame</span>Studio
-      </a>
+      <a class="brand" href="#"><span>Frame</span>Studio</a>
       <div class="nav-links">
         <a href="#portfolio">Portfolio</a>
         <a href="#stories">Stories</a>
@@ -86,10 +101,7 @@
       <div class="hero-content">
         <span class="hero-kicker">Premium wedding photography</span>
         <h2>Memories framed like cinema.</h2>
-        <p>
-          Editorial wedding photography, cinematic films, and emotion-led storytelling
-          crafted for couples who want every frame to feel timeless.
-        </p>
+        <p>Editorial wedding photography, cinematic films, and emotion-led storytelling crafted for couples who want every frame to feel timeless.</p>
         <div class="hero-actions">
           <a href="#portfolio" class="primary-btn">View Portfolio</a>
           <a href="#contact" class="ghost-btn">Check Availability</a>
@@ -101,7 +113,7 @@
         <div class="card-content">
           <span>Upcoming Shoot</span>
           <strong>Royal Wedding · 24 July</strong>
-          <small>Lead captured, quotation sent, advance pending</small>
+          <small>Lead captured · quotation sent · advance pending</small>
         </div>
       </div>
     </section>
