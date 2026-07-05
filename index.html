@@ -3,75 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Photo Comes Alive — Photographer Intro</title>
-  <link rel="preconnect" href="https://images.unsplash.com">
-  <style>
-    :root{
-      --cream:#f7efe3;
-      --gold:#d9b46f;
-      --ink:#070604;
-      --muted:rgba(255,255,255,.72);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:#050403;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;overflow-x:hidden}
-    body{min-height:100vh}
-    .experience{position:fixed;inset:0;z-index:20;overflow:hidden;background:#050403;isolation:isolate}
-    .scene{position:absolute;inset:0;overflow:hidden;cursor:pointer;transform:translateZ(0)}
-    .photo-layer{position:absolute;inset:-8%;background-image:var(--img);background-size:cover;background-position:center;will-change:transform,filter,opacity;transform:scale(1.07)}
-    .base{filter:brightness(.72) contrast(1.05) saturate(.9);transition:transform 1600ms cubic-bezier(.16,1,.3,1),filter 1400ms ease}
-    .bg-blur{filter:blur(18px) brightness(.55) saturate(1.1);opacity:.78;transform:scale(1.12);mix-blend-mode:screen;transition:opacity 1200ms ease,transform 1600ms cubic-bezier(.16,1,.3,1)}
-    .subject{inset:6% 6% 0 6%;background-size:cover;background-position:center;clip-path:ellipse(30% 52% at 48% 59%);filter:brightness(1.02) contrast(1.02);opacity:0;transform:scale(1.05) translateY(18px);transition:opacity 900ms ease,transform 1600ms cubic-bezier(.16,1,.3,1),filter 900ms ease}
-    .alive .base{transform:scale(1.14);filter:brightness(.58) contrast(1.08) saturate(.95)}
-    .alive .bg-blur{opacity:.35;transform:scale(1.2)}
-    .alive .subject{opacity:1;transform:scale(1.01) translateY(-8px);filter:brightness(1.08) contrast(1.05)}
-    .vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,rgba(0,0,0,0) 0 34%,rgba(0,0,0,.35) 66%,rgba(0,0,0,.86) 100%),linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,.08) 45%,rgba(0,0,0,.5));z-index:4;pointer-events:none}
-    .grain{position:absolute;inset:-50%;z-index:8;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");animation:grain 1.2s steps(4) infinite}
-    .light-leak{position:absolute;inset:-15%;z-index:6;opacity:0;pointer-events:none;background:radial-gradient(circle at 18% 22%,rgba(255,196,103,.65),transparent 22%),radial-gradient(circle at 82% 18%,rgba(255,88,64,.34),transparent 20%),linear-gradient(120deg,transparent 0 42%,rgba(255,229,181,.25) 49%,transparent 62%);filter:blur(10px);transform:translateX(-10%) rotate(-5deg);transition:opacity 900ms ease,transform 1800ms cubic-bezier(.16,1,.3,1)}
-    .alive .light-leak{opacity:.7;transform:translateX(8%) rotate(4deg)}
-    .flash{position:absolute;inset:0;z-index:15;background:#fff;opacity:0;pointer-events:none}.flash.active{animation:flash .55s ease-out}
-    .topbar{position:absolute;top:22px;left:22px;right:22px;z-index:10;display:flex;justify-content:space-between;align-items:center;color:var(--cream);opacity:0;animation:fadeDown 900ms .25s forwards}.brand{font-family:Georgia,serif;font-size:22px;letter-spacing:.5px}.tag{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(247,239,227,.72)}
-    .instruction{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);z-index:10;text-align:center;width:min(90%,520px);padding:18px 22px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(7,6,4,.34);backdrop-filter:blur(18px);box-shadow:0 18px 80px rgba(0,0,0,.35);animation:pulse 1.8s ease-in-out infinite}.instruction strong{display:block;font-size:clamp(18px,4.5vw,28px);font-family:Georgia,serif;color:var(--cream);font-weight:400}.instruction span{display:block;margin-top:4px;font-size:13px;color:var(--muted)}
-    .story-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-42%);z-index:11;text-align:center;width:min(92%,850px);opacity:0;pointer-events:none}.story-title .eyebrow{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}.story-title h1{font-family:Georgia, 'Times New Roman', serif;font-size:clamp(46px,12vw,120px);line-height:.88;font-weight:400;color:var(--cream);text-shadow:0 24px 80px rgba(0,0,0,.7)}.story-title p{margin:22px auto 0;max-width:520px;color:rgba(255,255,255,.76);line-height:1.65;font-size:clamp(14px,2.8vw,18px)}
-    .alive .instruction{animation:instructionOut 620ms forwards}.alive .story-title{animation:titleIn 1300ms .38s cubic-bezier(.16,1,.3,1) forwards}
-    .enter{position:absolute;left:50%;bottom:8vh;transform:translate(-50%,18px);z-index:12;opacity:0;border:0;border-radius:999px;padding:15px 28px;background:var(--cream);color:#15110b;font-weight:700;letter-spacing:.2px;box-shadow:0 18px 60px rgba(0,0,0,.5);cursor:pointer}.alive .enter{animation:buttonIn 900ms 1.65s forwards}
-    .site{min-height:100vh;background:#f7efe3;color:#14110b;opacity:0;transform:translateY(40px);transition:opacity 900ms ease,transform 900ms cubic-bezier(.16,1,.3,1);padding:28px}.site.revealed{opacity:1;transform:none}.site nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10vh}.site .logo{font-family:Georgia,serif;font-size:26px}.site .links{display:flex;gap:24px;color:#625746;font-size:14px}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:end;max-width:1180px;margin:auto}.site h2{font-family:Georgia,serif;font-size:clamp(48px,8vw,108px);line-height:.92;font-weight:400;letter-spacing:-2px}.site p{font-size:18px;line-height:1.8;color:#665b4a;max-width:520px;margin-top:24px}.hero-img{height:68vh;border-radius:34px;background-image:var(--img);background-size:cover;background-position:center;box-shadow:0 38px 100px rgba(49,36,18,.32);position:relative;overflow:hidden}.hero-img:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.2))}.cta{margin-top:32px;display:inline-flex;padding:15px 24px;border-radius:999px;background:#14110b;color:#fff;text-decoration:none;font-weight:700}
-    .hidden{display:none!important}
-    @keyframes grain{0%{transform:translate(0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-4%)}75%{transform:translate(4%,3%)}100%{transform:translate(0)}}
-    @keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
-    @keyframes pulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.025)}}
-    @keyframes flash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
-    @keyframes instructionOut{to{opacity:0;transform:translateX(-50%) translateY(16px) scale(.96);visibility:hidden}}
-    @keyframes titleIn{from{opacity:0;transform:translate(-50%,-35%) scale(.96);filter:blur(10px)}to{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}}
-    @keyframes buttonIn{to{opacity:1;transform:translate(-50%,0)}}
-    @media(max-width:760px){.topbar{top:18px;left:18px;right:18px}.tag{display:none}.hero-grid{grid-template-columns:1fr}.hero-img{height:45vh;order:-1;border-radius:24px}.site nav{margin-bottom:42px}.site .links{gap:13px}.instruction{bottom:7vh}.story-title{top:48%}.story-title p{padding:0 18px}.enter{bottom:7vh}}
-  </style>
+  <title>Frame Studio | Cinematic Photography Experience</title>
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section class="experience" id="experience" style="--img:url('https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1800&q=90')">
-    <div class="scene" id="scene" aria-label="Tap the photo to reveal the story">
-      <div class="photo-layer base"></div>
-      <div class="photo-layer bg-blur"></div>
-      <div class="photo-layer subject"></div>
-      <div class="light-leak"></div>
-      <div class="vignette"></div>
-      <div class="grain"></div>
-      <div class="flash" id="flash"></div>
-      <div class="topbar"><div class="brand">Frame Studio</div><div class="tag">Cinematic Wedding Stories</div></div>
-      <div class="instruction" id="instruction"><strong>Tap the photo to reveal the story</strong><span>A still frame becomes a living memory</span></div>
-      <div class="story-title"><div class="eyebrow">Every frame has a story</div><h1>Memories, brought to life.</h1><p>A cinematic website opening designed for premium photographers who want their portfolio to feel emotional before the first scroll.</p></div>
-      <button class="enter" id="enter">Enter Portfolio</button>
+  <div class="grain"></div>
+  <div class="custom-cursor" aria-hidden="true"><span></span></div>
+
+  <section class="intro" id="intro" aria-label="Camera intro animation">
+    <div class="intro-bg"></div>
+    <div class="zoom-plate" aria-hidden="true"></div>
+    <div class="bokeh b1"></div>
+    <div class="bokeh b2"></div>
+    <div class="bokeh b3"></div>
+    <div class="bokeh b4"></div>
+
+    <div class="camera-shell" id="cameraShell">
+      <div class="top-label">FRAME STUDIO / 85MM F1.4</div>
+      <div class="lens" id="lens">
+        <div class="lens-ring ring-outer"></div>
+        <div class="lens-ring ring-mid"></div>
+        <div class="lens-glass" id="lensGlass">
+          <div class="reflection reflection-one"></div>
+          <div class="reflection reflection-two"></div>
+          <div class="sensor-grid"></div>
+          <div class="aperture">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="hero-inside-lens"></div>
+        </div>
+      </div>
+      <div class="camera-meta">
+        <span>ISO <b id="isoValue">100</b></span>
+        <span>F <b>1.4</b></span>
+        <span>1/<b id="shutterValue">500</b></span>
+        <span>RAW</span>
+      </div>
     </div>
+
+    <div class="viewfinder-hud" id="viewfinderHud">
+      <div class="hud-corner tl"></div>
+      <div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div>
+      <div class="hud-corner br"></div>
+      <div class="focus-square" id="focusSquare">
+        <i></i><i></i><i></i><i></i>
+      </div>
+      <div class="record-dot">REC</div>
+      <div class="hud-bottom">
+        <span>AF-C</span>
+        <span>85MM</span>
+        <span>4K 60</span>
+        <span id="battery">87%</span>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">Tap to focus</button>
+    <div class="status-text" id="statusText">Every story begins with focus.</div>
+    <div class="flash" id="flash"></div>
   </section>
-  <main class="site" id="site" style="--img:url('https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1800&q=90')">
-    <nav><div class="logo">Frame Studio</div><div class="links"><span>Stories</span><span>Films</span><span>Contact</span></div></nav>
-    <section class="hero-grid"><div><h2>Wedding stories with soul.</h2><p>Editorial photography, cinematic films, and intimate visual storytelling for couples who want their memories to feel timeless.</p><a class="cta" href="#">View Portfolio</a></div><div class="hero-img"></div></section>
+
+  <main class="site" id="site">
+    <header class="navbar">
+      <div class="brand">Frame Studio</div>
+      <nav>
+        <a href="#work">Work</a>
+        <a href="#stories">Stories</a>
+        <a href="#booking">Booking</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-media" id="heroMedia"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">Premium wedding photography</p>
+        <h1><span>Stories</span><span>captured</span><span>with soul.</span></h1>
+        <p class="hero-desc">A cinematic portfolio experience designed for photographers who want their website to feel as premium as their work.</p>
+        <a class="cta" href="#work">Explore the gallery</a>
+      </div>
+      <div class="scroll-note">Scroll to develop the film</div>
+    </section>
+
+    <section class="film-strip" id="work">
+      <p class="section-kicker">Selected Frames</p>
+      <h2>Gallery that feels like a contact sheet.</h2>
+      <div class="strip-track">
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" alt="Wedding moment"><span>Wedding Vows</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80" alt="Couple portrait"><span>Portrait Session</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80" alt="Bride detail"><span>Bridal Details</span></article>
+        <article class="frame-card"><img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?auto=format&fit=crop&w=900&q=80" alt="Wedding ceremony"><span>Golden Ceremony</span></article>
+      </div>
+    </section>
+
+    <section class="story" id="stories">
+      <div>
+        <p class="section-kicker">The Website Payoff</p>
+        <h2>From intro animation to business enquiry.</h2>
+      </div>
+      <div class="story-card">
+        <p>This demo is built to make a photographer say: “Can you add this same camera intro to my website?”</p>
+        <button>Book a creative website</button>
+      </div>
+    </section>
   </main>
-  <script>
-    const scene=document.getElementById('scene');const exp=document.getElementById('experience');const flash=document.getElementById('flash');const enter=document.getElementById('enter');const site=document.getElementById('site');let alive=false;
-    function reveal(){if(alive)return;alive=true;flash.classList.add('active');scene.classList.add('alive');if(navigator.vibrate) navigator.vibrate(35);setTimeout(()=>flash.classList.remove('active'),650)}
-    function enterSite(){exp.style.transition='opacity 900ms ease, transform 900ms cubic-bezier(.16,1,.3,1)';exp.style.opacity='0';exp.style.transform='scale(1.04)';site.classList.add('revealed');document.body.style.overflow='auto';setTimeout(()=>exp.classList.add('hidden'),920)}
-    scene.addEventListener('click',reveal);enter.addEventListener('click',e=>{e.stopPropagation();enterSite()});
-    window.addEventListener('mousemove',e=>{if(window.innerWidth<800)return;const x=(e.clientX/window.innerWidth-.5)*14;const y=(e.clientY/window.innerHeight-.5)*10;document.querySelector('.base').style.transform=`scale(${alive?1.14:1.07}) translate(${x*-0.18}px,${y*-0.18}px)`;document.querySelector('.subject').style.transform=`scale(${alive?1.01:1.05}) translate(${x*0.45}px,${alive?-8:18+y*0.2}px)`});
-  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
