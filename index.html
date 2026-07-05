@@ -3,107 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frame Studio | Cinematic Photography Experience</title>
-  <link rel="preconnect" href="https://images.unsplash.com" />
+  <title>Frame Studio — Touch To Focus</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="grain"></div>
-  <div class="custom-cursor" aria-hidden="true"><span></span></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
 
-  <section class="intro" id="intro" aria-label="Camera intro animation">
-    <div class="intro-bg"></div>
-    <div class="zoom-plate" aria-hidden="true"></div>
-    <div class="bokeh b1"></div>
-    <div class="bokeh b2"></div>
-    <div class="bokeh b3"></div>
-    <div class="bokeh b4"></div>
+  <main class="experience" id="experience">
+    <section class="camera-stage" id="cameraStage">
+      <div class="scene sharp-scene"></div>
+      <div class="scene blur-scene" id="blurScene"></div>
+      <div class="scene vignette"></div>
+      <div class="dust" id="dust"></div>
 
-    <div class="camera-shell" id="cameraShell">
-      <div class="top-label">FRAME STUDIO / 85MM F1.4</div>
-      <div class="lens" id="lens">
-        <div class="lens-ring ring-outer"></div>
-        <div class="lens-ring ring-mid"></div>
-        <div class="lens-glass" id="lensGlass">
-          <div class="reflection reflection-one"></div>
-          <div class="reflection reflection-two"></div>
-          <div class="sensor-grid"></div>
+      <div class="lens-intro" id="lensIntro">
+        <div class="glass-ring">
+          <span class="ring-highlight"></span>
+          <span class="lens-reflection"></span>
           <div class="aperture">
             <span></span><span></span><span></span><span></span><span></span><span></span>
           </div>
-          <div class="hero-inside-lens"></div>
+        </div>
+        <p>Tap anywhere to focus</p>
+      </div>
+
+      <div class="hud" id="hud">
+        <div class="hud-top">
+          <span>SONY α7 IV</span>
+          <span class="rec"><i></i> 4K REC</span>
+        </div>
+
+        <div class="focus-bracket" id="focusBracket">
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="focus-label" id="focusLabel">AF-C</div>
+
+        <div class="tap-hint" id="tapHint">
+          <strong>Tap to focus</strong>
+          <small>Try bride, bouquet, lights or rings</small>
+        </div>
+
+        <div class="hud-bottom">
+          <span id="iso">ISO 100</span>
+          <span>F1.8</span>
+          <span>1/250</span>
+          <span>128GB</span>
+          <span id="shots">1423 Photos</span>
+          <span id="battery">98%</span>
         </div>
       </div>
-      <div class="camera-meta">
-        <span>ISO <b id="isoValue">100</b></span>
-        <span>F <b>1.4</b></span>
-        <span>1/<b id="shutterValue">500</b></span>
-        <span>RAW</span>
-      </div>
-    </div>
 
-    <div class="viewfinder-hud" id="viewfinderHud">
-      <div class="hud-corner tl"></div>
-      <div class="hud-corner tr"></div>
-      <div class="hud-corner bl"></div>
-      <div class="hud-corner br"></div>
-      <div class="focus-square" id="focusSquare">
-        <i></i><i></i><i></i><i></i>
-      </div>
-      <div class="record-dot">REC</div>
-      <div class="hud-bottom">
-        <span>AF-C</span>
-        <span>85MM</span>
-        <span>4K 60</span>
-        <span id="battery">87%</span>
-      </div>
-    </div>
+      <div class="target-dot bride" data-target="Bride" data-x="48" data-y="43"></div>
+      <div class="target-dot bouquet" data-target="Bouquet" data-x="42" data-y="63"></div>
+      <div class="target-dot rings" data-target="Rings" data-x="59" data-y="70"></div>
+      <div class="target-dot lights" data-target="Fairy lights" data-x="72" data-y="30"></div>
 
-    <button class="start-btn" id="startBtn">Tap to focus</button>
-    <div class="status-text" id="statusText">Every story begins with focus.</div>
-    <div class="flash" id="flash"></div>
-  </section>
+      <button class="enter-site" id="enterSite">Enter Portfolio</button>
+    </section>
 
-  <main class="site" id="site">
-    <header class="navbar">
-      <div class="brand">Frame Studio</div>
+    <section class="website" id="website">
       <nav>
-        <a href="#work">Work</a>
-        <a href="#stories">Stories</a>
-        <a href="#booking">Booking</a>
+        <div class="logo">Frame Studio</div>
+        <div class="links">
+          <a href="#portfolio">Portfolio</a>
+          <a href="#stories">Stories</a>
+          <a href="#contact">Contact</a>
+        </div>
       </nav>
-    </header>
 
-    <section class="hero">
-      <div class="hero-media" id="heroMedia"></div>
       <div class="hero-copy">
-        <p class="eyebrow">Premium wedding photography</p>
-        <h1><span>Stories</span><span>captured</span><span>with soul.</span></h1>
-        <p class="hero-desc">A cinematic portfolio experience designed for photographers who want their website to feel as premium as their work.</p>
-        <a class="cta" href="#work">Explore the gallery</a>
-      </div>
-      <div class="scroll-note">Scroll to develop the film</div>
-    </section>
-
-    <section class="film-strip" id="work">
-      <p class="section-kicker">Selected Frames</p>
-      <h2>Gallery that feels like a contact sheet.</h2>
-      <div class="strip-track">
-        <article class="frame-card"><img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" alt="Wedding moment"><span>Wedding Vows</span></article>
-        <article class="frame-card"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80" alt="Couple portrait"><span>Portrait Session</span></article>
-        <article class="frame-card"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80" alt="Bride detail"><span>Bridal Details</span></article>
-        <article class="frame-card"><img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?auto=format&fit=crop&w=900&q=80" alt="Wedding ceremony"><span>Golden Ceremony</span></article>
-      </div>
-    </section>
-
-    <section class="story" id="stories">
-      <div>
-        <p class="section-kicker">The Website Payoff</p>
-        <h2>From intro animation to business enquiry.</h2>
-      </div>
-      <div class="story-card">
-        <p>This demo is built to make a photographer say: “Can you add this same camera intro to my website?”</p>
-        <button>Book a creative website</button>
+        <small>Wedding Photography & Films</small>
+        <h1>Stories captured with soul.</h1>
+        <p>Premium photography experience designed for couples who want their memories to feel cinematic, emotional and timeless.</p>
       </div>
     </section>
   </main>
