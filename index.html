@@ -4,80 +4,82 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Frame Studio — Touch To Focus</title>
-  <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="custom-cursor" aria-hidden="true"></div>
-
-  <main class="experience" id="experience">
-    <section class="camera-stage" id="cameraStage">
-      <div class="scene sharp-scene"></div>
-      <div class="scene blur-scene" id="blurScene"></div>
-      <div class="scene vignette"></div>
+  <main class="app" id="app">
+    <section class="camera" id="camera">
+      <div class="photo sharp" id="sharpPhoto"></div>
+      <div class="photo soft" id="softPhoto"></div>
+      <div class="grain"></div>
+      <div class="vignette"></div>
       <div class="dust" id="dust"></div>
 
-      <div class="lens-intro" id="lensIntro">
-        <div class="glass-ring">
-          <span class="ring-highlight"></span>
-          <span class="lens-reflection"></span>
+      <div class="intro" id="intro">
+        <p class="eyebrow">FRAME STUDIO</p>
+        <h1>Every story begins with focus.</h1>
+        <div class="lens">
+          <div class="lens-glow"></div>
+          <div class="lens-glass"></div>
           <div class="aperture">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
           </div>
         </div>
-        <p>Tap anywhere to focus</p>
+        <button id="startBtn" class="start">Start camera</button>
       </div>
 
       <div class="hud" id="hud">
-        <div class="hud-top">
+        <div class="topbar">
           <span>SONY α7 IV</span>
-          <span class="rec"><i></i> 4K REC</span>
+          <span><b></b> REC&nbsp;&nbsp;00:00:<em id="timer">00</em></span>
         </div>
 
-        <div class="focus-bracket" id="focusBracket">
-          <span></span><span></span><span></span><span></span>
+        <div class="rule rule-h"></div>
+        <div class="rule rule-v"></div>
+
+        <div class="focus-box" id="focusBox">
+          <i></i><i></i><i></i><i></i>
         </div>
 
-        <div class="focus-label" id="focusLabel">AF-C</div>
+        <div class="focus-status" id="focusStatus">Tap anywhere to focus</div>
 
-        <div class="tap-hint" id="tapHint">
-          <strong>Tap to focus</strong>
-          <small>Try bride, bouquet, lights or rings</small>
+        <div class="hint" id="hint">
+          <strong>Tap anywhere to focus</strong>
+          <small>Try the flowers, couple, lights or details</small>
         </div>
 
-        <div class="hud-bottom">
+        <div class="bottombar">
           <span id="iso">ISO 100</span>
           <span>F1.8</span>
-          <span>1/250</span>
-          <span>128GB</span>
-          <span id="shots">1423 Photos</span>
+          <span>1/500</span>
+          <span>4K</span>
+          <span>RAW</span>
           <span id="battery">98%</span>
         </div>
       </div>
 
-      <div class="target-dot bride" data-target="Bride" data-x="48" data-y="43"></div>
-      <div class="target-dot bouquet" data-target="Bouquet" data-x="42" data-y="63"></div>
-      <div class="target-dot rings" data-target="Rings" data-x="59" data-y="70"></div>
-      <div class="target-dot lights" data-target="Fairy lights" data-x="72" data-y="30"></div>
-
-      <button class="enter-site" id="enterSite">Enter Portfolio</button>
+      <button class="enter" id="enter">Enter Portfolio</button>
     </section>
 
-    <section class="website" id="website">
+    <section class="site" id="site">
       <nav>
-        <div class="logo">Frame Studio</div>
-        <div class="links">
-          <a href="#portfolio">Portfolio</a>
-          <a href="#stories">Stories</a>
-          <a href="#contact">Contact</a>
+        <div class="logo">FrameStudio</div>
+        <div class="navlinks">
+          <a href="#">Portfolio</a>
+          <a href="#">Stories</a>
+          <a href="#">Contact</a>
         </div>
       </nav>
-
-      <div class="hero-copy">
-        <small>Wedding Photography & Films</small>
-        <h1>Stories captured with soul.</h1>
-        <p>Premium photography experience designed for couples who want their memories to feel cinematic, emotional and timeless.</p>
+      <div class="copy">
+        <p>Premium wedding photography</p>
+        <h2>Memories framed like cinema.</h2>
+        <span>Editorial wedding photography, cinematic films, and emotional-led storytelling crafted for couples who want every frame to feel timeless.</span>
+        <div class="actions">
+          <a href="#">View Portfolio</a>
+          <a href="#">Check Availability</a>
+        </div>
       </div>
+      <button class="replay" id="replay">Replay intro</button>
     </section>
   </main>
 
